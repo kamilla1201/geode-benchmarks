@@ -14,8 +14,6 @@
  */
 package org.apache.geode.benchmark.tasks;
 
-import static org.apache.geode.util.internal.UncheckedUtils.uncheckedCast;
-
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -67,7 +65,7 @@ public class OQLQuery extends BenchmarkDriverAdapter implements Serializable {
     final Object result = query.execute(minId, maxId);
 
     if (isValidationEnabled) {
-      verifyResults(uncheckedCast(result), minId, maxId);
+      verifyResults(UncheckedUtils.uncheckedCast(result), minId, maxId);
     }
 
     return true;
@@ -83,5 +81,19 @@ public class OQLQuery extends BenchmarkDriverAdapter implements Serializable {
       }
     }
   }
+  @SuppressWarnings({"unchecked", "unused"})
+  public static class UncheckedUtils {
 
+    protected UncheckedUtils() {
+      // do not instantiate
+    }
+
+    /**
+     * Casts an instance of a raw type to a parameterized type. Preference should be given to
+     * converting all code from using raw types to using parameterized types when possible.
+     */
+    public static <T> T uncheckedCast(Object object) {
+      return (T) object;
+    }
+  }
 }
